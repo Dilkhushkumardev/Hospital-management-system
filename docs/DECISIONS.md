@@ -1,39 +1,23 @@
-# Architecture & Technical Decision Records (ADRs)
+# Architecture Decision Records (DECISIONS.md)
 
-## ADR-001: Direct JDBC vs ORM Framework (Hibernate)
+## ADR-001: Centralized JDBC Connection Architecture
 - **Status:** Accepted
-- **Context:** The system needs high-speed desktop performance with minimal runtime memory footprint and clear direct SQL interaction.
-- **Decision:** Use raw JDBC (`java.sql.Connection`, `Statement`, `ResultSet`) with `mysql-connector-java`.
-- **Consequences:** 
-  - Faster startup time without heavy bytecode enhancement or XML/Annotation overhead.
-  - Transparent SQL execution.
+- **Context:** Individual UI frames previously managed ad-hoc database connections, leading to connection leaks and redundant driver registrations.
+- **Decision:** Implement a centralized `conn.java` class with singleton statement management and clear initialization error logging.
+- **Consequences:** Eliminates boilerplate connection code across forms, centralizes credential management, and provides uniform failure handling.
 
 ---
 
-## ADR-002: Dynamic Tabular Rendering with `ResultSet2xml / DbUtils`
+## ADR-002: Modular Undecorated Windows with Draggable Custom Title Bars
 - **Status:** Accepted
-- **Context:** Presenting SQL result sets inside `JTable` requires verbose `AbstractTableModel` boilerplate in standard Swing.
-- **Decision:** Adopt `DbUtils.resultSetToTableModel(resultSet)` from `ResultSet2xml.jar`.
-- **Consequences:** 
-  - Reduced boilerplate code to a single line across `Room`, `Employee_info`, `Department`, `Ambulance`, and `All_Patient_Info`.
-  - Instant auto-generation of table headers and column data directly from SQL schema.
+- **Context:** Sub-screens opened from the central reception hub require a cohesive, clean card experience without jarring operating system borders, while maintaining the ability for administrators to reposition windows freely across multi-monitor setups.
+- **Decision:** Implement `Theme.ModernTitleBar` supporting mouse drag motion listeners and hover-reactive close triggers across all modal screens (`NEW_PATIENT`, `Room`, `Patient_Discharge`, etc.) combined with `setUndecorated(true)`.
+- **Consequences:** Provides a desktop software feel (similar to modern productivity applications) with intuitive window positioning and clean lifecycle disposal.
 
 ---
 
-## ADR-003: Desktop GUI Framework (Java Swing vs JavaFX vs Web)
+## ADR-003: Modern UI Component & Design System Engine (`Theme.java`)
 - **Status:** Accepted
-- **Context:** Hospital receptionists require an offline-capable, standalone desktop client that runs natively on hospital workstations.
-- **Decision:** Standardize on Java Swing (`javax.swing.*`) with `java.awt.*`.
-- **Consequences:** 
-  - Native JVM integration requiring zero external browser dependencies.
-  - Predictable window coordinates and layout management.
-
----
-
-## ADR-004: Synchronized Room Status State Machine
-- **Status:** Accepted
-- **Context:** Room availability must always remain strictly consistent with patient admissions and discharges.
-- **Decision:** Execute room status update queries directly in the same workflow as patient creation (`INSERT patient` ➔ `UPDATE room SET Availability='Occupied'`) and discharge (`DELETE patient` ➔ `UPDATE room SET Availability='Available'`).
-- **Consequences:**
-  - Prevents double-booking of rooms.
-  - Ensures accurate live status in `Search_Room.java`.
+- **Context:** Native Java Swing defaults look dated with pixelated fonts, harsh borders, and inconsistent component alignment across different resolutions.
+- **Decision:** Create a centralized `Theme.java` component engine that activates 2D rendering hints (`KEY_TEXT_ANTIALIASING`, `KEY_ANTIALIASING`), defines cohesive medical color tokens, provides rounded buttons with smooth hover animations, padded text fields with focus highlight rings, and styled `JTable` rendering with zebra striping and custom headers.
+- **Consequences:** Guarantees a cohesive, visually appealing aesthetic across all 10 application views with minimal code duplication.

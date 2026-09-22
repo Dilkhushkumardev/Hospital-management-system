@@ -9,115 +9,111 @@ import java.sql.ResultSet;
 
 public class Search_Room extends JFrame {
     private static final long serialVersionUID = 1L;
-    Choice choice;
-    JTable table;
+    private JComboBox<String> statusCombo;
+    private JTable table;
+    private JLabel matchCountLabel;
 
-    Search_Room(){
-        JPanel panel = new JPanel();
-        panel.setBounds(5,5,690,490);
-        panel.setBackground(new Color(90,156,163));
-        panel.setLayout(null);
-        add(panel);
+    public Search_Room() {
+        Theme.initUI();
+        setSize(840, 560);
+        setLocationRelativeTo(null);
+        setUndecorated(true);
+        setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JLabel For = new JLabel("Search For Room");
-        For.setBounds(250,11,186,31);
-        For.setForeground(Color.white);
-        For.setFont(new Font("Tahoma",Font.BOLD,20));
-        panel.add(For);
+        // Modern Drag Title Bar
+        Theme.ModernTitleBar titleBar = new Theme.ModernTitleBar(this, "Search & Filter Room Availability");
+        add(titleBar, BorderLayout.NORTH);
 
-        JLabel status = new JLabel("Status :");
-        status.setBounds(70,70,80,20);
-        status.setForeground(Color.white);
-        status.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(status);
+        // Main Container
+        JPanel bodyPanel = new JPanel(null);
+        bodyPanel.setBackground(Theme.BG_LIGHT);
+        bodyPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Theme.CARD_BORDER));
 
-        choice = new Choice();
-        choice.setBounds(170,70,120,20);
-        choice.add("Available");
-        choice.add("Occupied");
-        panel.add(choice);
+        // Filter Controls Card
+        Theme.ModernCard filterCard = new Theme.ModernCard(Theme.CARD_BG, Theme.CARD_BORDER, 14);
+        filterCard.setBounds(30, 20, 780, 80);
+        filterCard.setLayout(null);
+
+        JLabel filterLabel = new JLabel("Filter Availability Status");
+        filterLabel.setFont(Theme.FONT_LABEL);
+        filterLabel.setForeground(Theme.TEXT_DARK);
+        filterLabel.setBounds(25, 12, 200, 16);
+        filterCard.add(filterLabel);
+
+        statusCombo = new JComboBox<>(new String[]{"All Rooms", "Available", "Occupied"});
+        statusCombo.setBounds(25, 34, 220, 34);
+        statusCombo.setFont(Theme.FONT_REGULAR);
+        statusCombo.setBackground(Theme.CARD_BG);
+        filterCard.add(statusCombo);
+
+        Theme.ModernButton searchBtn = new Theme.ModernButton("Search Rooms", Theme.PRIMARY, Theme.PRIMARY_DARK, Theme.TEXT_WHITE);
+        searchBtn.setBounds(265, 34, 160, 34);
+        filterCard.add(searchBtn);
+
+        matchCountLabel = new JLabel("Showing all active rooms");
+        matchCountLabel.setFont(Theme.FONT_SMALL);
+        matchCountLabel.setForeground(Theme.TEXT_MUTED);
+        matchCountLabel.setBounds(450, 42, 300, 20);
+        filterCard.add(matchCountLabel);
+
+        bodyPanel.add(filterCard);
+
+        // Table Panel Card
+        Theme.ModernCard tableCard = new Theme.ModernCard(Theme.CARD_BG, Theme.CARD_BORDER, 14);
+        tableCard.setBounds(30, 115, 780, 350);
+        tableCard.setLayout(new BorderLayout());
+        tableCard.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
         table = new JTable();
-        table.setBounds(0,187,700,210);
-        table.setBackground(new Color(90,156,163));
-        table.setForeground(Color.WHITE);
-        panel.add(table);
+        JScrollPane scrollPane = Theme.createStyledScrollPane(table);
+        tableCard.add(scrollPane, BorderLayout.CENTER);
 
-        try{
-            conn c = new conn();
-            if (c.statement != null) {
-                String q = "select * from Room ";
-                ResultSet resultSet = c.statement.executeQuery(q);
-                table.setModel(DbUtils.resultSetToTableModel(resultSet));
+        bodyPanel.add(tableCard);
+
+        // Bottom Actions
+        Theme.ModernButton backBtn = new Theme.ModernButton("Back to Dashboard", Theme.SECONDARY, Theme.SECONDARY_LIGHT, Theme.TEXT_WHITE);
+        backBtn.setBounds(620, 475, 190, 38);
+        backBtn.addActionListener(e -> {
+            setVisible(false);
+            dispose();
+        });
+        bodyPanel.add(backBtn);
+
+        searchBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performSearch();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        });
+
+        // Trigger initial search
+        performSearch();
+
+        add(bodyPanel, BorderLayout.CENTER);
+        setVisible(true);
+    }
+
+    private void performSearch() {
+        String selected = (String) statusCombo.getSelectedItem();
+        String q;
+        if ("All Rooms".equals(selected)) {
+            q = "select room_no as 'Room No', Availability, Price as 'Price (Rs)', Room_Type as 'Bed Type' from Room";
+        } else {
+            q = "select room_no as 'Room No', Availability, Price as 'Price (Rs)', Room_Type as 'Bed Type' from Room where Availability = '" + selected + "'";
         }
 
-        JLabel Roomno = new JLabel("Room Number");
-        Roomno.setBounds(10,162,150,20);
-        Roomno.setForeground(Color.white);
-        Roomno.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(Roomno);
-
-        JLabel available = new JLabel("Availability");
-        available.setBounds(175,162,150,20);
-        available.setForeground(Color.white);
-        available.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(available);
-
-        JLabel price = new JLabel("Price");
-        price.setBounds(358,162,150,20);
-        price.setForeground(Color.white);
-        price.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(price);
-
-        JLabel Bed = new JLabel("Bed Type");
-        Bed.setBounds(540,162,150,20);
-        Bed.setForeground(Color.white);
-        Bed.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(Bed);
-
-        JButton Search = new JButton("Search");
-        Search.setBounds(200,420,120,25);
-        Search.setBackground(Color.BLACK);
-        Search.setForeground(Color.WHITE);
-        panel.add(Search);
-        Search.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String q = "select * from Room where Availability = '"+choice.getSelectedItem()+"'";
-                try{
-                    conn c = new conn();
-                    if (c.statement != null) {
-                        ResultSet resultSet = c.statement.executeQuery(q);
-                        table.setModel(DbUtils.resultSetToTableModel(resultSet));
-                    }
-                } catch (Exception E) {
-                    E.printStackTrace();
-                }
+        try {
+            conn c = new conn();
+            if (c.statement != null) {
+                ResultSet resultSet = c.statement.executeQuery(q);
+                table.setModel(DbUtils.resultSetToTableModel(resultSet));
+                Theme.styleTable(table);
+                matchCountLabel.setText("Found " + table.getRowCount() + " matching room(s) for [" + selected + "]");
             }
-        });
-
-        JButton Back = new JButton("Back");
-        Back.setBounds(380,420,120,25);
-        Back.setBackground(Color.BLACK);
-        Back.setForeground(Color.WHITE);
-        panel.add(Back);
-        Back.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                dispose();
-            }
-        });
-
-        setUndecorated(true);
-        setSize(700,500);
-        setLayout(null);
-        setLocation(450,250);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setVisible(true);
+        } catch (Exception E) {
+            E.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

@@ -3,65 +3,91 @@ package hospital.management.system;
 import net.proteanit.sql.DbUtils;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 public class Department extends JFrame {
     private static final long serialVersionUID = 1L;
+    private JTable table;
 
-    Department() {
-        JPanel panel = new JPanel();
-        panel.setBounds(5, 5, 690, 490);
-        panel.setLayout(null);
-        panel.setBackground(new Color(90, 156, 163));
-        add(panel);
+    public Department() {
+        Theme.initUI();
+        setSize(800, 540);
+        setLocationRelativeTo(null);
+        setUndecorated(true);
+        setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JTable table = new JTable();
-        table.setBounds(0, 40, 700, 350);
-        table.setBackground(new Color(90, 156, 163));
-        table.setFont(new Font("Tahoma", Font.BOLD, 14));
-        panel.add(table);
+        // Modern Drag Title Bar
+        Theme.ModernTitleBar titleBar = new Theme.ModernTitleBar(this, "Hospital Departments & Contact Directory");
+        add(titleBar, BorderLayout.NORTH);
 
+        // Main Container
+        JPanel bodyPanel = new JPanel(null);
+        bodyPanel.setBackground(Theme.BG_LIGHT);
+        bodyPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Theme.CARD_BORDER));
+
+        // Header Card
+        Theme.ModernCard infoCard = new Theme.ModernCard(Theme.CARD_BG, Theme.CARD_BORDER, 14);
+        infoCard.setBounds(30, 20, 740, 70);
+        infoCard.setLayout(null);
+
+        JLabel titleLbl = new JLabel("Clinical Departments & Direct Extensions");
+        titleLbl.setFont(Theme.FONT_SUBTITLE);
+        titleLbl.setForeground(Theme.TEXT_DARK);
+        titleLbl.setBounds(25, 14, 400, 22);
+        infoCard.add(titleLbl);
+
+        JLabel subLbl = new JLabel("Dial internal extension numbers for direct triage and ward transfer.");
+        subLbl.setFont(Theme.FONT_SMALL);
+        subLbl.setForeground(Theme.TEXT_MUTED);
+        subLbl.setBounds(25, 36, 450, 18);
+        infoCard.add(subLbl);
+
+        bodyPanel.add(infoCard);
+
+        // Table Panel Card
+        Theme.ModernCard tableCard = new Theme.ModernCard(Theme.CARD_BG, Theme.CARD_BORDER, 14);
+        tableCard.setBounds(30, 105, 740, 340);
+        tableCard.setLayout(new BorderLayout());
+        tableCard.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+
+        table = new JTable();
+        JScrollPane scrollPane = Theme.createStyledScrollPane(table);
+        tableCard.add(scrollPane, BorderLayout.CENTER);
+
+        bodyPanel.add(tableCard);
+
+        // Bottom Action Bar
+        Theme.ModernButton backBtn = new Theme.ModernButton("Close Directory", Theme.SECONDARY, Theme.SECONDARY_LIGHT, Theme.TEXT_WHITE);
+        backBtn.setBounds(580, 460, 190, 38);
+        backBtn.addActionListener(e -> {
+            setVisible(false);
+            dispose();
+        });
+        bodyPanel.add(backBtn);
+
+        // Load data
         try {
             conn c = new conn();
             if (c.statement != null) {
-                String q = "select * from department";
+                String q = "select Department_Name as 'Department Name', Phone_Number as 'Direct Phone / Extension' from department";
                 ResultSet resultSet = c.statement.executeQuery(q);
                 table.setModel(DbUtils.resultSetToTableModel(resultSet));
+                Theme.styleTable(table);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // Fallback if column names differ slightly
+            try {
+                conn c = new conn();
+                if (c.statement != null) {
+                    ResultSet rs = c.statement.executeQuery("select * from department");
+                    table.setModel(DbUtils.resultSetToTableModel(rs));
+                    Theme.styleTable(table);
+                }
+            } catch (Exception ignored) {}
         }
 
-        JLabel label1 = new JLabel("Department");
-        label1.setBounds(145, 11, 105, 20);
-        label1.setFont(new Font("Tahoma", Font.BOLD, 14));
-        panel.add(label1);
-
-        JLabel label2 = new JLabel("Phone Number");
-        label2.setBounds(431, 11, 150, 20);
-        label2.setFont(new Font("Tahoma", Font.BOLD, 14));
-        panel.add(label2);
-
-        JButton b1 = new JButton("BACK");
-        b1.setBounds(400, 410, 130, 30);
-        b1.setBackground(Color.black);
-        b1.setForeground(Color.WHITE);
-        panel.add(b1);
-        b1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                dispose();
-            }
-        });
-
-        setUndecorated(true);
-        setSize(700, 500);
-        setLayout(null);
-        setLocation(350, 250);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        add(bodyPanel, BorderLayout.CENTER);
         setVisible(true);
     }
 

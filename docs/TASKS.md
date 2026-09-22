@@ -38,12 +38,19 @@
 - [x] Build [Ambulance.java](file:///d:/MY%20PROJECT/H.M.S/Hospital%20management%20system/src/hospital/management/system/Ambulance.java) ambulance tracker
 - [x] Build [All_Patient_Info.java](file:///d:/MY%20PROJECT/H.M.S/Hospital%20management%20system/src/hospital/management/system/All_Patient_Info.java) master records table
 
-## Phase 8: Documentation & Repository Polish
+## Phase 8: Modern UI/UX Redesign & Theme Engine
+- [x] Create [Theme.java](file:///d:/MY%20PROJECT/H.M.S/Hospital%20management%20system/src/hospital/management/system/Theme.java) central design token and modern component engine
+- [x] Redesign [Login.java](file:///d:/MY%20PROJECT/H.M.S/Hospital%20management%20system/src/hospital/management/system/Login.java) with split medical hero card and keyboard shortcuts
+- [x] Redesign [Reception.java](file:///d:/MY%20PROJECT/H.M.S/Hospital%20management%20system/src/hospital/management/system/Reception.java) as a modern Command Center with live clock and categorized cards
+- [x] Upgrade all dialogs with draggable title bars (`ModernTitleBar`), auto-centering, and styled inputs
+- [x] Modernize data tables with high-contrast headers, zebra striping, and styled scroll panes
+
+## Phase 9: Documentation & Repository Polish
 - [x] Write rich, professional `README.md` with system architecture diagrams
 - [x] Set up complete `docs/` documentation suite following the Vibe Coding Guide (PRD, ARCHITECTURE, DESIGN, RULES, TASKS, DECISIONS, MEMORY, TEST_PLAN, SECURITY)
 - [x] Create `.env.example` configuration template
 
-## Phase 9: Future Roadmap & Enhancements
+## Phase 10: Future Roadmap & Enhancements
 - [ ] Implement PreparedStatement across all query executions for advanced SQL sanitization
 - [ ] Add PDF Invoice generation for checkout receipts
 - [ ] Add doctor appointment scheduling calendar
