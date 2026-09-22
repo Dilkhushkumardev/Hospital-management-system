@@ -5,22 +5,25 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+
 public class Login extends JFrame implements ActionListener {
+    private static final long serialVersionUID = 1L;
     JTextField textField;
     JPasswordField jPasswordField;
-    JButton b1,b2;
-    //Constructor
+    JButton b1, b2;
+
+    // Constructor
     Login(){
         JLabel namelabel = new JLabel("Username");
         namelabel.setBounds(40,20,100,30);
         namelabel.setFont(new Font("Tahoma",Font.BOLD,16));
-        namelabel.setForeground( Color.BLACK);
-         add(namelabel);
+        namelabel.setForeground(Color.BLACK);
+        add(namelabel);
 
-        JLabel password= new JLabel("Password");
+        JLabel password = new JLabel("Password");
         password.setBounds(40,70,100,30);
         password.setFont(new Font("Tahoma",Font.BOLD,16));
-        password.setForeground( Color.BLACK);
+        password.setForeground(Color.BLACK);
         add(password);
 
         textField = new JTextField();
@@ -29,13 +32,13 @@ public class Login extends JFrame implements ActionListener {
         textField.setBackground(new Color(210,150,50));
         add(textField);
 
-        jPasswordField =new JPasswordField();
+        jPasswordField = new JPasswordField();
         jPasswordField.setBounds(150,70,150,30);
         jPasswordField.setFont(new Font("Tahoma",Font.PLAIN,15));
         jPasswordField.setBackground(new Color(210,150,50));
         add(jPasswordField);
 
-        ImageIcon imageIcon =new ImageIcon(ClassLoader.getSystemResource("icon/login.png"));
+        ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/login.png"));
         Image i1 = imageIcon.getImage().getScaledInstance(320,350,Image.SCALE_DEFAULT);
         ImageIcon imageIcon1 = new ImageIcon(i1);
         JLabel label = new JLabel(imageIcon1);
@@ -62,31 +65,46 @@ public class Login extends JFrame implements ActionListener {
         setSize(750, 300);
         setLocation(400, 270);
         setLayout(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
-    public static void main(String[]args){
+
+    public static void main(String[] args){
         new Login();
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == b1) {
+            String user = textField.getText().trim();
+            String pass = new String(jPasswordField.getPassword()).trim();
+
+            if (user.isEmpty() || pass.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please enter Username and Password");
+                return;
+            }
+
             try {
                 conn c = new conn();
-                String user = textField.getText();
-                String Pass = jPasswordField.getText();
-                String q = "select * from login where ID = '" + user + "' and PW='" + Pass + "'";
+                if (c.statement == null) {
+                    JOptionPane.showMessageDialog(null, "Database Connection Failed! Please check MySQL service.");
+                    return;
+                }
+                String q = "select * from login where ID = '" + user + "' and PW='" + pass + "'";
                 ResultSet resultSet = c.statement.executeQuery(q);
                 if (resultSet.next()) {
                     new Reception();
                     setVisible(false);
+                    dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Invalid");
+                    JOptionPane.showMessageDialog(null, "Invalid Username or Password");
                 }
             } catch (Exception E) {
                 E.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Login Error: " + E.getMessage());
             }
         } else {
-            System.exit(10);
+            System.exit(0);
         }
     }
 }

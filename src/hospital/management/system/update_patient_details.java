@@ -5,9 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
-public class update_patient_details  extends JFrame {
-    update_patient_details(){
 
+public class update_patient_details extends JFrame {
+    private static final long serialVersionUID = 1L;
+    Choice choice;
+    JTextField textFieldR, textFieldINTIme, textFieldAmount, textFieldPending;
+
+    update_patient_details(){
         JPanel panel = new JPanel();
         panel.setBounds(5,5,940,490);
         panel.setBackground(new Color(90,156,163));
@@ -16,7 +20,7 @@ public class update_patient_details  extends JFrame {
 
         ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/updated.png"));
         Image image = imageIcon.getImage().getScaledInstance(300,300,Image.SCALE_DEFAULT);
-        ImageIcon  imageIcon1 = new ImageIcon(image);
+        ImageIcon imageIcon1 = new ImageIcon(image);
         JLabel label = new JLabel(imageIcon1);
         label.setBounds(500,60,300,300);
         panel.add(label);
@@ -33,26 +37,29 @@ public class update_patient_details  extends JFrame {
         label2.setForeground(Color.WHITE);
         panel.add(label2);
 
-        Choice choice = new Choice();
+        choice = new Choice();
         choice.setBounds(248,85,140,25);
         panel.add(choice);
 
         try{
             conn c = new conn();
-            ResultSet resultSet = c.statement.executeQuery("select * from patient_info");
-            while (resultSet.next()){
-                choice.add(resultSet.getString("Name"));
+            if (c.statement != null) {
+                ResultSet resultSet = c.statement.executeQuery("select * from patient_info");
+                while (resultSet.next()){
+                    choice.add(resultSet.getString("Name"));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         JLabel label3 = new JLabel("Room Number :");
         label3.setBounds(25,129,150,14);
         label3.setFont(new Font("Tahoma",Font.PLAIN,14));
         label3.setForeground(Color.WHITE);
         panel.add(label3);
 
-        JTextField textFieldR = new JTextField();
+        textFieldR = new JTextField();
         textFieldR.setBounds(248,129,140,20);
         panel.add(textFieldR);
 
@@ -62,7 +69,7 @@ public class update_patient_details  extends JFrame {
         label4.setForeground(Color.WHITE);
         panel.add(label4);
 
-        JTextField textFieldINTIme = new JTextField();
+        textFieldINTIme = new JTextField();
         textFieldINTIme.setBounds(248,174,140,20);
         panel.add(textFieldINTIme);
 
@@ -72,7 +79,7 @@ public class update_patient_details  extends JFrame {
         label5.setForeground(Color.WHITE);
         panel.add(label5);
 
-        JTextField textFieldAmount = new JTextField();
+        textFieldAmount = new JTextField();
         textFieldAmount.setBounds(248,216,140,20);
         panel.add(textFieldAmount);
 
@@ -82,8 +89,9 @@ public class update_patient_details  extends JFrame {
         label6.setForeground(Color.WHITE);
         panel.add(label6);
 
-        JTextField textFieldPending = new JTextField();
+        textFieldPending = new JTextField();
         textFieldPending.setBounds(248,261,140,20);
+        textFieldPending.setEditable(false);
         panel.add(textFieldPending);
 
         JButton check = new JButton("CHECK");
@@ -94,28 +102,73 @@ public class update_patient_details  extends JFrame {
         check.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String id = choice.getSelectedItem();
-                String q = "select * from patient_info where Name = '"+id+"'";
+                String selectedName = choice.getSelectedItem();
+                if (selectedName == null || selectedName.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please select a patient.");
+                    return;
+                }
+                String q = "select * from patient_info where Name = '"+selectedName+"'";
                 try{
                     conn c = new conn();
-                    ResultSet resultSet =c.statement.executeQuery(q);
-                    while (resultSet.next()){
-                        textFieldR.setText(resultSet.getString("Room_Number"));
-                        textFieldINTIme.setText(resultSet.getString("Time"));
-                        textFieldAmount.setText(resultSet.getString("Dposite"));
+                    if (c.statement == null) {
+                        JOptionPane.showMessageDialog(null, "Database Connection Failed!");
+                        return;
                     }
-                    ResultSet resultSet1 = c.statement.executeQuery("select * from Room where room_no = '"+textFieldR.getText()+"'");
-                    while (resultSet1.next()){
-                        String price = resultSet1.getString("Price");
-                        int amountPaid = Integer.parseInt(price) - Integer.parseInt(textFieldAmount.getText());
-                        textFieldPending.setText(""+amountPaid);
+                    ResultSet resultSet = c.statement.executeQuery(q);
+                    String roomNo = "";
+                    String depositStr = "0";
+                    if (resultSet.next()){
+                        roomNo = resultSet.getString("Room_Number");
+                        textFieldR.setText(roomNo);
+                        textFieldINTIme.setText(resultSet.getString("Time"));
+                        
+                        // Handle column name variations gracefully
+                        try {
+                            depositStr = resultSet.getString("Dposite");
+                        } catch (Exception ex) {
+                            try {
+                                depositStr = resultSet.getString("Deposit");
+                            } catch (Exception ex2) {
+                                depositStr = "0";
+                            }
+                        }
+                        if (depositStr == null || depositStr.trim().isEmpty()) {
+                            depositStr = "0";
+                        }
+                        textFieldAmount.setText(depositStr);
+                    }
 
+                    if (!roomNo.trim().isEmpty()) {
+                        ResultSet resultSet1 = c.statement.executeQuery("select * from Room where room_no = '"+roomNo+"'");
+                        if (resultSet1.next()){
+                            String priceStr = resultSet1.getString("Price");
+                            int price = 0;
+                            int paid = 0;
+                            try {
+                                price = Integer.parseInt(priceStr.trim());
+                            } catch (Exception ex) {
+                                price = 0;
+                            }
+                            try {
+                                paid = Integer.parseInt(depositStr.trim());
+                            } catch (Exception ex) {
+                                paid = 0;
+                            }
+                            int pendingAmount = price - paid;
+                            textFieldPending.setText(String.valueOf(pendingAmount));
+                        } else {
+                            textFieldPending.setText("0");
+                        }
+                    } else {
+                        textFieldPending.setText("0");
                     }
                 } catch (Exception E) {
                     E.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error fetching details: " + E.getMessage());
                 }
             }
         });
+
         JButton Update = new JButton("Update");
         Update.setBounds(56,378,89,23);
         Update.setBackground(Color.BLACK);
@@ -124,21 +177,33 @@ public class update_patient_details  extends JFrame {
         Update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String selectedName = choice.getSelectedItem();
+                if (selectedName == null || selectedName.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please select a patient to update.");
+                    return;
+                }
+                String room = textFieldR.getText().trim();
+                String time = textFieldINTIme.getText().trim();
+                String amount = textFieldAmount.getText().trim();
+
                 try{
                     conn c = new conn();
-                    String q = choice.getSelectedItem();
-                    String room = textFieldR.getText();
-                    String time = textFieldINTIme.getText();
-                    String amount = textFieldAmount.getText();
-                    c.statement.executeUpdate("update patient_info set Room_Number = '"+room+"',Time = '"+time+"',Dposite = '"+amount+"' where name = '"+q+"'");
-                    JOptionPane.showMessageDialog(null,"Update Successfully");
+                    if (c.statement == null) {
+                        JOptionPane.showMessageDialog(null, "Database Connection Failed!");
+                        return;
+                    }
+                    String updateQuery = "update patient_info set Room_Number = '"+room+"', Time = '"+time+"', Dposite = '"+amount+"' where Name = '"+selectedName+"'";
+                    c.statement.executeUpdate(updateQuery);
+                    JOptionPane.showMessageDialog(null,"Updated Successfully");
                     setVisible(false);
-
+                    dispose();
                 } catch (Exception E) {
                     E.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Update failed: " + E.getMessage());
                 }
             }
         });
+
         JButton back = new JButton("Back");
         back.setBounds(168,378,89,23);
         back.setBackground(Color.BLACK);
@@ -148,6 +213,7 @@ public class update_patient_details  extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                dispose();
             }
         });
 
@@ -155,8 +221,10 @@ public class update_patient_details  extends JFrame {
         setSize(950,500);
         setLayout(null);
         setLocation(400,250);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
+
     public static void main(String[] args) {
         new update_patient_details();
     }

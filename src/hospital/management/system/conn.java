@@ -1,15 +1,21 @@
 package hospital.management.system;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+
 public class conn {
-    Connection connection;
-    Statement statement;
+    public Connection connection;
+    public Statement statement;
+
     public conn(){
-        try{connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital_management_system", "root","Dilkhush@30");
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital_management_system", "root", "Dilkhush@30");
             statement = connection.createStatement();
-        }catch (Exception e){
-           e.printStackTrace();
+        } catch (Exception e){
+            System.err.println("Database connection error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

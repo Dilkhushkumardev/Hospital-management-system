@@ -6,8 +6,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+
 public class Room extends JFrame {
+    private static final long serialVersionUID = 1L;
     JTable table;
+
     Room(){
         JPanel panel = new JPanel();
         panel.setBounds(5,5,890,590);
@@ -29,12 +32,15 @@ public class Room extends JFrame {
 
         try{
             conn c = new conn();
-            String q = "select * from room";
-             ResultSet resultset = c.statement.executeQuery(q);
-             table.setModel(DbUtils.resultSetToTableModel(resultset));
+            if (c.statement != null) {
+                String q = "select * from room";
+                ResultSet resultset = c.statement.executeQuery(q);
+                table.setModel(DbUtils.resultSetToTableModel(resultset));
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
+
         JLabel label1 = new JLabel("Room No");
         label1.setBounds(12,15,80,15);
         label1.setFont(new Font("Tahoma",Font.BOLD,14));
@@ -55,7 +61,7 @@ public class Room extends JFrame {
         label4.setFont(new Font("Tahoma",Font.BOLD,14));
         panel.add(label4);
 
-        JButton back =new JButton("Back");
+        JButton back = new JButton("Back");
         back.setBounds(200,500,120,30);
         back.setBackground(Color.BLACK);
         back.setForeground(Color.white);
@@ -64,14 +70,18 @@ public class Room extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                dispose();
             }
         });
+
         setUndecorated(true);
         setSize(900,600);
         setLayout(null);
         setLocation(300,200);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
+
     public static void main(String[] args) {
         new Room();
     }

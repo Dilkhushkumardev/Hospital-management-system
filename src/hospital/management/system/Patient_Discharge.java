@@ -1,25 +1,29 @@
 package hospital.management.system;
 
-import com.mysql.cj.jdbc.result.ResultSetImpl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.util.Date;
+
 public class Patient_Discharge extends JFrame {
+    private static final long serialVersionUID = 1L;
+    Choice choice;
+    JLabel RNo, INTime, OUTime;
+
     Patient_Discharge(){
         JPanel panel = new JPanel();
-       panel.setBounds(5,5,790,390);
-       panel.setBackground(new Color(90,156,163));
-       panel.setLayout(null);
-       add(panel);
+        panel.setBounds(5,5,790,390);
+        panel.setBackground(new Color(90,156,163));
+        panel.setLayout(null);
+        add(panel);
 
-       JLabel label = new JLabel("CHECK-OUT");
-       label.setBounds(100,20,150,20);
-       label.setFont(new Font("Tahoma",Font.BOLD,20));
-       label.setForeground(Color.WHITE);
-       panel.add(label);
+        JLabel label = new JLabel("CHECK-OUT");
+        label.setBounds(100,20,150,20);
+        label.setFont(new Font("Tahoma",Font.BOLD,20));
+        label.setForeground(Color.WHITE);
+        panel.add(label);
 
         JLabel label2 = new JLabel("Customer Id");
         label2.setBounds(30,80,150,20);
@@ -27,15 +31,17 @@ public class Patient_Discharge extends JFrame {
         label2.setForeground(Color.WHITE);
         panel.add(label2);
 
-        Choice choice = new Choice();
+        choice = new Choice();
         choice.setBounds(200,80,150,25);
         panel.add(choice);
 
         try{
             conn c = new conn();
-            ResultSet resultSet = c.statement.executeQuery("select * from patient_info");
-            while (resultSet.next()){
-                choice.add(resultSet.getString("number"));
+            if (c.statement != null) {
+                ResultSet resultSet = c.statement.executeQuery("select * from patient_info");
+                while (resultSet.next()){
+                    choice.add(resultSet.getString("number"));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,7 +53,7 @@ public class Patient_Discharge extends JFrame {
         label3.setForeground(Color.WHITE);
         panel.add(label3);
 
-        JLabel RNo = new JLabel("");
+        RNo = new JLabel("");
         RNo.setBounds(200,130,150,20);
         RNo.setFont(new Font("Tahoma",Font.BOLD,14));
         RNo.setForeground(Color.WHITE);
@@ -59,7 +65,7 @@ public class Patient_Discharge extends JFrame {
         label4.setForeground(Color.WHITE);
         panel.add(label4);
 
-        JLabel INTime = new JLabel("");
+        INTime = new JLabel("");
         INTime.setBounds(200,180,250,20);
         INTime.setFont(new Font("Tahoma",Font.BOLD,14));
         INTime.setForeground(Color.WHITE);
@@ -72,34 +78,11 @@ public class Patient_Discharge extends JFrame {
         panel.add(label5);
 
         Date date = new Date();
-
-        JLabel OUTime = new JLabel(""+date);
+        OUTime = new JLabel("" + date);
         OUTime.setBounds(200,230,250,20);
         OUTime.setFont(new Font("Tahoma",Font.BOLD,14));
         OUTime.setForeground(Color.WHITE);
         panel.add(OUTime);
-
-        JButton discharge = new JButton("Discharge");
-        discharge.setBounds(30,300,120,30);
-        discharge.setBackground(Color.BLACK);
-        discharge.setForeground(Color.white);
-        panel.add(discharge);
-
-        discharge.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                conn c = new conn();
-                try{
-                    c.statement.executeUpdate("delete from patient_info where number = '"+choice.getSelectedItem()+"'");
-                    c.statement.executeUpdate("update room set Availability  = 'Available' where room_no = '"+RNo.getText()+"'");
-                    JOptionPane.showMessageDialog(null ,"Done");
-                    setVisible(false);
-
-                }catch (Exception E){
-                    E.printStackTrace();
-                }
-            }
-        });
 
         JButton check = new JButton("Check");
         check.setBounds(170,300,120,30);
@@ -109,27 +92,83 @@ public class Patient_Discharge extends JFrame {
         check.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                conn c = new conn();
+                String selectedCustomer = choice.getSelectedItem();
+                if (selectedCustomer == null || selectedCustomer.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please select a Customer ID.");
+                    return;
+                }
                 try{
-                    ResultSet resultSet = c.statement.executeQuery("select * from patient_info where number = '"+choice.getSelectedItem()+"'");
-                    while (resultSet.next()){
+                    conn c = new conn();
+                    if (c.statement == null) {
+                        JOptionPane.showMessageDialog(null, "Database Connection Failed!");
+                        return;
+                    }
+                    ResultSet resultSet = c.statement.executeQuery("select * from patient_info where number = '"+selectedCustomer+"'");
+                    if (resultSet.next()){
                         RNo.setText(resultSet.getString("Room_Number"));
                         INTime.setText(resultSet.getString("Time"));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Patient record not found.");
                     }
                 } catch (Exception E) {
                     E.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error: " + E.getMessage());
                 }
             }
         });
-        JButton Back = new JButton(" Back");
+
+        JButton discharge = new JButton("Discharge");
+        discharge.setBounds(30,300,120,30);
+        discharge.setBackground(Color.BLACK);
+        discharge.setForeground(Color.white);
+        panel.add(discharge);
+        discharge.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedCustomer = choice.getSelectedItem();
+                if (selectedCustomer == null || selectedCustomer.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please select a Customer ID.");
+                    return;
+                }
+                try{
+                    conn c = new conn();
+                    if (c.statement == null) {
+                        JOptionPane.showMessageDialog(null, "Database Connection Failed!");
+                        return;
+                    }
+                    String roomToVacate = RNo.getText().trim();
+                    // If check wasn't clicked, query room number before delete
+                    if (roomToVacate.isEmpty()) {
+                        ResultSet rs = c.statement.executeQuery("select Room_Number from patient_info where number = '"+selectedCustomer+"'");
+                        if (rs.next()) {
+                            roomToVacate = rs.getString("Room_Number");
+                        }
+                    }
+
+                    c.statement.executeUpdate("delete from patient_info where number = '"+selectedCustomer+"'");
+                    if (roomToVacate != null && !roomToVacate.isEmpty()) {
+                        c.statement.executeUpdate("update room set Availability = 'Available' where room_no = '"+roomToVacate+"'");
+                    }
+                    JOptionPane.showMessageDialog(null ,"Patient Discharged Successfully");
+                    setVisible(false);
+                    dispose();
+                } catch (Exception E){
+                    E.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error discharging patient: " + E.getMessage());
+                }
+            }
+        });
+
+        JButton Back = new JButton("Back");
         Back.setBounds(300,300,120,30);
         Back.setBackground(Color.BLACK);
         Back.setForeground(Color.white);
-        panel.add( Back);
+        panel.add(Back);
         Back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                dispose();
             }
         });
 
@@ -137,8 +176,10 @@ public class Patient_Discharge extends JFrame {
         setSize(800,400);
         setLayout(null);
         setLocation(400,250);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
+
     public static void main(String[] args) {
         new Patient_Discharge();
     }

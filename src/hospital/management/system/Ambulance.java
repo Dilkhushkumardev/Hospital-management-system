@@ -1,17 +1,15 @@
 package hospital.management.system;
 
 import net.proteanit.sql.DbUtils;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
-public class Ambulance extends JFrame{
-
+public class Ambulance extends JFrame {
+    private static final long serialVersionUID = 1L;
     Ambulance(){
-
         JPanel panel = new JPanel();
         panel.setBounds(5,5,890,590);
         panel.setBackground(new Color(90,156,163));
@@ -26,10 +24,11 @@ public class Ambulance extends JFrame{
 
         try{
             conn c = new conn();
-            String q = "select * from Ambulance";
-            ResultSet resultSet = c.statement.executeQuery(q);
-            table.setModel(DbUtils.resultSetToTableModel(resultSet));
-
+            if (c.statement != null) {
+                String q = "select * from Ambulance";
+                ResultSet resultSet = c.statement.executeQuery(q);
+                table.setModel(DbUtils.resultSetToTableModel(resultSet));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,6 +67,7 @@ public class Ambulance extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                dispose();
             }
         });
 
@@ -75,6 +75,7 @@ public class Ambulance extends JFrame{
         setSize(900,600);
         setLayout(null);
         setLocation(300,200);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 

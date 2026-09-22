@@ -6,7 +6,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+
 public class All_Patient_Info extends JFrame {
+    private static final long serialVersionUID = 1L;
     All_Patient_Info(){
         JPanel panel = new JPanel();
         panel.setBounds(5,5,890,590);
@@ -22,12 +24,15 @@ public class All_Patient_Info extends JFrame {
 
         try{
             conn c = new conn();
-            String q = "select * from patient_info";
-            ResultSet resultSet = c.statement.executeQuery(q);
-            table.setModel(DbUtils.resultSetToTableModel(resultSet));
+            if (c.statement != null) {
+                String q = "select * from patient_info";
+                ResultSet resultSet = c.statement.executeQuery(q);
+                table.setModel(DbUtils.resultSetToTableModel(resultSet));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         JLabel label1 = new JLabel("ID");
         label1.setBounds(31,11,100,14);
         label1.setFont(new Font("Tahoma",Font.BOLD,14));
@@ -72,15 +77,18 @@ public class All_Patient_Info extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                dispose();
             }
         });
 
-       setUndecorated(true);
+        setUndecorated(true);
         setSize(900,600);
         setLayout(null);
         setLocation(300,200);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
+
     public static void main(String[] args) {
         new All_Patient_Info();
     }

@@ -6,13 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.util.Date;
+
 public class NEW_PATIENT extends JFrame implements ActionListener {
-    JComboBox comboBox;
-    JTextField textFieldNumber,textName,textFieldDisease,textFieldDeposite;
-    JRadioButton r1,r2;
+    private static final long serialVersionUID = 1L;
+    JComboBox<String> comboBox;
+    JTextField textFieldNumber, textName, textFieldDisease, textFieldDeposite;
+    JRadioButton r1, r2;
+    ButtonGroup genderGroup;
     Choice c1;
     JLabel date;
-    JButton b1,b2;
+    JButton b1, b2;
+
     NEW_PATIENT(){
         JPanel panel = new JPanel();
         panel.setBounds(5,5,840,540);
@@ -22,7 +26,7 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
 
         ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/patient.png"));
         Image image = imageIcon.getImage().getScaledInstance(200,200,Image.SCALE_DEFAULT);
-        ImageIcon imageIcon1 =new ImageIcon(image);
+        ImageIcon imageIcon1 = new ImageIcon(image);
         JLabel label = new JLabel(imageIcon1);
         label.setBounds(550,150,200,200);
         panel.add(label);
@@ -38,7 +42,7 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         labelID.setForeground(Color.WHITE);
         panel.add(labelID);
 
-        comboBox = new JComboBox(new String[]{"Aadhar Card","Voter Id","Driving License"});
+        comboBox = new JComboBox<>(new String[]{"Aadhar Card","Voter Id","Driving License"});
         comboBox.setBounds(270,73,150,20);
         comboBox.setBackground(new Color(3,45,48));
         comboBox.setForeground(Color.WHITE);
@@ -85,6 +89,11 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         r2.setBounds(350,191,80,15);
         panel.add(r2);
 
+        genderGroup = new ButtonGroup();
+        genderGroup.add(r1);
+        genderGroup.add(r2);
+        r1.setSelected(true);
+
         JLabel labelDisease = new JLabel("Disease");
         labelDisease.setBounds(35,231,200,14);
         labelDisease.setFont(new Font("TAHOMA", Font.BOLD,14));
@@ -101,21 +110,30 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         labelRoom.setForeground(Color.WHITE);
         panel.add(labelRoom);
 
-       c1= new Choice();
-       try{
-           conn c = new conn();
-           ResultSet resultSet = c.statement.executeQuery("select * from Room");
-           while (resultSet.next()){
-               c1.add(resultSet.getString("room_no"));
-           }
-       }catch (Exception e){
-           e.printStackTrace();
-       }
-       c1.setBounds(270,274,150,20);
-       c1.setFont(new Font("Tahoma",Font.BOLD,14));
-       c1.setForeground(Color.WHITE);
-       c1.setBackground(new Color(3,45,48));
-       panel.add(c1);
+        c1 = new Choice();
+        try{
+            conn c = new conn();
+            if (c.statement != null) {
+                ResultSet resultSet = c.statement.executeQuery("select * from Room where Availability = 'Available'");
+                while (resultSet.next()){
+                    c1.add(resultSet.getString("room_no"));
+                }
+                // Fallback if no available rooms found or all occupied
+                if (c1.getItemCount() == 0) {
+                    ResultSet allRooms = c.statement.executeQuery("select * from Room");
+                    while (allRooms.next()){
+                        c1.add(allRooms.getString("room_no"));
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        c1.setBounds(270,274,150,20);
+        c1.setFont(new Font("Tahoma",Font.BOLD,14));
+        c1.setForeground(Color.WHITE);
+        c1.setBackground(new Color(3,45,48));
+        panel.add(c1);
 
         JLabel labelDate = new JLabel("Time");
         labelDate.setBounds(35,316,200,14);
@@ -123,7 +141,7 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         labelDate.setForeground(Color.WHITE);
         panel.add(labelDate);
 
-        Date date1 =new Date();
+        Date date1 = new Date();
         date = new JLabel(""+date1);
         date.setBounds(270,316,250,14);
         date.setForeground(Color.white);
@@ -136,7 +154,7 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         labelDeposite.setForeground(Color.WHITE);
         panel.add(labelDeposite);
 
-        textFieldDeposite= new JTextField();
+        textFieldDeposite = new JTextField();
         textFieldDeposite.setBounds(271,359,150,20);
         panel.add(textFieldDeposite);
 
@@ -158,42 +176,64 @@ public class NEW_PATIENT extends JFrame implements ActionListener {
         setSize(850,550);
         setLayout(null);
         setLocation(300,250);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
+
     public static void main(String[] args) {
         new NEW_PATIENT();
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == b1){
-            conn c = new conn();
-            String radioBTN = null;
-            if (r1.isSelected()){
-                radioBTN = "Male";
-            } else if (r2.isSelected()){
+            String radioBTN = "Male";
+            if (r2.isSelected()){
                 radioBTN = "Female";
             }
             String s1 = (String)comboBox.getSelectedItem();
-            String s2 = textFieldNumber.getText();
-            String s3 = textName.getText();
+            String s2 = textFieldNumber.getText().trim();
+            String s3 = textName.getText().trim();
             String s4 = radioBTN;
-            String s5 = textFieldDisease.getText();
+            String s5 = textFieldDisease.getText().trim();
             String s6 = c1.getSelectedItem();
             String s7 = date.getText();
-            String s8 = textFieldDeposite.getText();
+            String s8 = textFieldDeposite.getText().trim();
+
+            if (s2.isEmpty() || s3.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please enter ID Number and Patient Name.");
+                return;
+            }
+
+            if (s6 == null || s6.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No room selected/available.");
+                return;
+            }
+
+            if (s8.isEmpty()) {
+                s8 = "0";
+            }
 
             try {
+                conn c = new conn();
+                if (c.statement == null) {
+                    JOptionPane.showMessageDialog(null, "Database connection failed!");
+                    return;
+                }
                 String q = "insert into Patient_info values ('"+s1+"', '"+s2+"', '"+s3+"', '"+s4+"', '"+s5+"', '"+s6+"', '"+s7+"', '"+s8+"')";
-                String q1 = "update room set Availability = 'Occupied' where room_no = '"+s6+"'"; // Ensure s6 is in quotes
-                c.statement.executeUpdate(q); // Correct method for insert
-                c.statement.executeUpdate(q1); // Correct method for update
+                String q1 = "update room set Availability = 'Occupied' where room_no = '"+s6+"'";
+                c.statement.executeUpdate(q);
+                c.statement.executeUpdate(q1);
                 JOptionPane.showMessageDialog(null, "Added Successfully");
                 setVisible(false);
+                dispose();
             } catch (Exception E) {
                 E.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error adding patient: " + E.getMessage());
             }
         } else {
             setVisible(false);
+            dispose();
         }
     }
 }
