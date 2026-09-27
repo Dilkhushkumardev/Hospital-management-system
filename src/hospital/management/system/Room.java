@@ -3,8 +3,6 @@ package hospital.management.system;
 import net.proteanit.sql.DbUtils;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 public class Room extends JFrame {
