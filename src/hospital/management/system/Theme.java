@@ -1,7 +1,6 @@
 package hospital.management.system;
 
 import javax.swing.*;
-import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -82,7 +81,6 @@ public class Theme {
         private Color normalColor;
         private Color hoverColor;
         private Color pressedColor;
-        private Color textColor;
         private int cornerRadius = 10;
         private boolean isHovered = false;
         private boolean isPressed = false;
@@ -92,7 +90,6 @@ public class Theme {
             this.normalColor = bg;
             this.hoverColor = hoverBg;
             this.pressedColor = hoverBg.darker();
-            this.textColor = fg;
             
             setFont(FONT_BUTTON);
             setForeground(fg);
