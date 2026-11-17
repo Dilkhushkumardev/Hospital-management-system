@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Care - Modern Management & Administration Suite</title>
+  <link rel="icon" href="src/icon/dr.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+  <!-- ============================================================== -->
+  <!-- TOAST NOTIFICATION CONTAINER                                   -->
+  <!-- ============================================================== -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ============================================================== -->
+  <!-- 1. LOGIN SCREEN                                                -->
+  <!-- ============================================================== -->
+  <div id="login-view" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 border border-slate-700/20">
+      
+      <!-- Left Hero Banner -->
+      <div class="bg-gradient-to-br from-indigo-700 via-blue-600 to-cyan-600 p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="absolute -left-10 -top-10 w-48 h-48 bg-cyan-400/20 rounded-full blur-xl pointer-events-none"></div>
+        
+        <div class="relative z-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-xs font-semibold tracking-wider text-cyan-200 border border-white/20">
+            <i data-lucide="cross" class="w-4 h-4 text-cyan-300"></i> HMS HEALTHCARE
+          </div>
+          <h1 class="text-3xl md:text-4xl font-extrabold mt-6 tracking-tight leading-tight">
+            Hospital Care
+          </h1>
+          <p class="text-indigo-100 text-sm mt-2 leading-relaxed">
+            Modern Desktop & Cloud Operations Suite for Patients, Beds, Diagnostics & Emergency Fleet.
+          </p>
+        </div>
+
+        <div class="relative z-10 my-8 flex justify-center">
+          <div class="w-40 h-40 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 p-4 flex items-center justify-center shadow-inner">
+            <i data-lucide="activity" class="w-24 h-24 text-white animate-pulse"></i>
+          </div>
+        </div>
+
+        <div class="relative z-10 text-xs text-indigo-200 flex items-center justify-between border-t border-white/15 pt-4">
+          <span>Enterprise Edition v2.4</span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> MySQL Live Engine
+          </span>
+        </div>
+      </div>
+
+      <!-- Right Form Container -->
+      <div class="p-8 md:p-12 flex flex-col justify-center bg-white">
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Staff Sign In</h2>
+          <p class="text-slate-500 text-sm mt-1">Enter your administrator credentials to access the central console.</p>
+        </div>
+
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Username</label>
+            <div class="relative">
+              <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+              <input type="text" id="login-user" value="admin" required
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Password</label>
+            <div class="relative">
+              <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+              <input type="password" id="login-pass" value="admin123" required
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all">
+            </div>
+          </div>
+
+          <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-center gap-2">
+            <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0"></i>
+            <span>Demo credentials: <b>admin</b> / <b>admin123</b></span>
+          </div>
+
+          <button type="submit"
+            class="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2">
+            <span>Sign In to Reception</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+        <div class="mt-6 pt-6 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+          <span>Encrypted Auth</span>
+          <span>© 2026 Hospital Care HMS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- 2. RECEPTION DASHBOARD & MAIN WORKSPACE                        -->
+  <!-- ============================================================== -->
+  <div id="app-view" class="hidden min-h-screen flex flex-col md:flex-row bg-slate-50">
+    
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col justify-between shrink-0 border-r border-slate-800">
+      <div>
+        <!-- Brand -->
+        <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md shadow-indigo-500/30">
+              ✚
+            </div>
+            <div>
+              <div class="text-white font-bold text-base leading-tight">Hospital Care</div>
+              <div class="text-[10px] text-cyan-400 font-medium">RECEPTION HUB</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="p-4 space-y-1 text-sm font-medium">
+          <button onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all" data-tab="dashboard">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            <span>Dashboard</span>
+          </button>
+          
+          <button onclick="switchTab('new-patient')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all" data-tab="new-patient">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>Add Patient</span>
+          </button>
+
+          <button onclick="switchTab('rooms')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all" data-tab="rooms">
+            <i data-lucide="bed-double" class="w-4 h-4"></i>
+            <span>Room Management</span>
+          </button>
+
+          <button onclick="switchTab('patients-dir')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all" data-tab="patients-dir">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            <span>All Patients</span>
+          </button>
+
+          <button onclick="switchTab('billing')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all" data-tab="billing">
+            <i data-lucide="receipt" class="w-4 h-4"></i>
+            <span>Update & Bills</span>
+          </button>
+
+          <button onclick="switchTab('discharge')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all" data-tab="discharge">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span>Discharge Patient</span>
+          </button>
+
+          <button onclick="switchTab('staff')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all" data-tab="staff">
+            <i data-lucide="stethoscope" class="w-4 h-4"></i>
+            <span>Staff Directory</span>
+          </button>
+
+          <button onclick="switchTab('departments')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all" data-tab="departments">
+            <i data-lucide="building-2" class="w-4 h-4"></i>
+            <span>Departments</span>
+          </button>
+
+          <button onclick="switchTab('ambulance')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all" data-tab="ambulance">
+            <i data-lucide="truck" class="w-4 h-4"></i>
+            <span>Ambulance Fleet</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Footer User Profile -->
+      <div class="p-4 border-t border-slate-800">
+        <div class="flex items-center justify-between bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-semibold text-xs border border-indigo-500/30">
+              AD
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-white">Administrator</div>
+              <div class="text-[10px] text-emerald-400 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Online
+              </div>
+            </div>
+          </div>
+          <button onclick="logout()" title="Logout" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-700/50 transition-colors">
+            <i data-lucide="power" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Content -->
+    <main class="flex-1 flex flex-col overflow-y-auto custom-scroll">
+      
+      <!-- Top Navigation Bar -->
+      <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+        <div>
+          <h1 id="page-title" class="text-xl font-bold text-slate-900 tracking-tight">Overview Dashboard</h1>
+          <p id="page-desc" class="text-xs text-slate-500">Live operational telemetry & room availability</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="resetData()" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-1.5">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset Demo Data
+          </button>
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> System Operational
+          </div>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <div class="p-6 max-w-7xl w-full mx-auto space-y-6">
+
+        <!-- ============================================== -->
+        <!-- TAB: DASHBOARD OVERVIEW                        -->
+        <!-- ============================================== -->
+        <section id="tab-dashboard" class="space-y-6">
+          <!-- Metric Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Admitted Patients</p>
+                <h3 id="stat-patients" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
+                <p class="text-xs text-indigo-600 font-medium mt-1 flex items-center gap-1">
+                  <i data-lucide="activity" class="w-3 h-3"></i> Active In-patients
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                <i data-lucide="users" class="w-6 h-6"></i>
+              </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Available Beds</p>
+                <h3 id="stat-avail-rooms" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
+                <p class="text-xs text-emerald-600 font-medium mt-1 flex items-center gap-1">
+                  <i data-lucide="check-circle" class="w-3 h-3"></i> Ready for Admission
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <i data-lucide="bed-double" class="w-6 h-6"></i>
+              </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Occupied Beds</p>
+                <h3 id="stat-occ-rooms" class="text-2xl font-bold text-amber-600 mt-1">0</h3>
+                <p class="text-xs text-amber-600 font-medium mt-1 flex items-center gap-1">
+                  <i data-lucide="user-check" class="w-3 h-3"></i> Under Treatment
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <i data-lucide="shield-alert" class="w-6 h-6"></i>
+              </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Ready Ambulances</p>
+                <h3 id="stat-ambulances" class="text-2xl font-bold text-cyan-600 mt-1">0</h3>
+                <p class="text-xs text-cyan-600 font-medium mt-1 flex items-center gap-1">
+                  <i data-lucide="siren" class="w-3 h-3"></i> Emergency Ready
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center">
+                <i data-lucide="truck" class="w-6 h-6"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Hub -->
+          <div class="bg-gradient-to-r from-indigo-900 to-slate-900 p-6 rounded-3xl text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <span class="px-2.5 py-1 rounded-full bg-indigo-500/30 text-indigo-200 text-xs font-semibold">QUICK ACTIONS</span>
+              <h2 class="text-xl font-bold mt-2">Central Reception Desk</h2>
+              <p class="text-slate-300 text-xs mt-1 max-w-xl">
+                Admit new emergencies, compute pending invoices, check live bed availability, or dispatch emergency ambulance teams.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2.5 shrink-0">
+              <button onclick="switchTab('new-patient')" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition-all flex items-center gap-2 shadow-md">
+                <i data-lucide="user-plus" class="w-4 h-4"></i> New Admission
+              </button>
+              <button onclick="switchTab('discharge')" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 border border-slate-700">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Patient Discharge
+              </button>
+              <button onclick="switchTab('billing')" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 border border-slate-700">
+                <i data-lucide="receipt" class="w-4 h-4"></i> Billing & Dues
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Bed Status Grid -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">Hospital Ward & Bed Telemetry</h3>
+                <p class="text-xs text-slate-500">Live occupancy matrix across general, deluxe, and ICU wards</p>
+              </div>
+              <button onclick="switchTab('rooms')" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+                View All Rooms <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+            <div id="dashboard-bed-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3"></div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB: ADD NEW PATIENT                           -->
+        <!-- ============================================== -->
+        <section id="tab-new-patient" class="hidden">
+          <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs max-w-3xl mx-auto">
+            <div class="border-b border-slate-100 pb-5 mb-6">
+              <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-semibold">REGISTRATION FORM</span>
+              <h2 class="text-xl font-bold text-slate-900 mt-2">New Patient Intake & Room Allocation</h2>
+              <p class="text-xs text-slate-500 mt-1">Record patient ID proof, diagnosis, admission timestamp, and allocate an active room.</p>
+            </div>
+
+            <form id="form-new-patient" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">ID Proof Type</label>
+                  <select id="p-id-type" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-600">
+                    <option value="Aadhar Card">Aadhar Card</option>
+                    <option value="Voter ID">Voter ID</option>
+                    <option value="Driving License">Driving License</option>
+                    <option value="Passport">Passport</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">ID Proof Number</label>
+                  <input type="text" id="p-number" required placeholder="e.g. 1234-5678-9012"
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-600">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Patient Full Name</label>
+                  <input type="text" id="p-name" required placeholder="e.g. Rahul Sharma"
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-600">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Gender</label>
+                  <div class="flex items-center gap-6 pt-2">
+                    <label class="inline-flex items-center gap-2 text-sm text-slate-700">
+                      <input type="radio" name="p-gender" value="Male" checked class="text-indigo-600"> Male
+                    </label>
+                    <label class="inline-flex items-center gap-2 text-sm text-slate-700">
+                      <input type="radio" name="p-gender" value="Female" class="text-indigo-600"> Female
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Patient Disease / Symptoms</label>
+                <input type="text" id="p-disease" required placeholder="e.g. Acute Viral Fever, Fracture, Hypertension"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-600">
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Select Available Room</label>
+                  <select id="p-room" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-600"></select>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Initial Deposit Amount (₹)</label>
+                  <input type="number" id="p-deposit" required placeholder="e.g. 1000" min="0"
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-600">
+                </div>
+              </div>
+
+              <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+                <span>Admission Timestamp:</span>
+                <span id="p-time-display" class="font-bold text-slate-800"></span>
+              </div>
+
+              <div class="pt-4 flex gap-3">
+                <button type="submit" class="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                  <i data-lucide="check" class="w-4 h-4"></i> Register & Allocate Bed
+                </button>
+                <button type="button" onclick="switchTab('dashboard')" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-xl transition-all">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB: ROOM MANAGEMENT & SEARCH                  -->
+        <!-- ============================================== -->
+        <section id="tab-rooms" class="hidden space-y-6">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">Room & Bed Availability Registry</h2>
+                <p class="text-xs text-slate-500">Live status of hospital beds, charges, and categories</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="text-xs font-semibold text-slate-600">Filter By:</label>
+                <select id="room-filter" onchange="renderRooms()" class="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium focus:ring-2 focus:ring-indigo-600">
+                  <option value="All">All Rooms</option>
+                  <option value="Available">Available Beds</option>
+                  <option value="Occupied">Occupied Beds</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="border-b border-slate-200 bg-slate-50 text-slate-600 text-xs uppercase font-bold tracking-wider">
+                    <th class="py-3 px-4">Room No</th>
+                    <th class="py-3 px-4">Availability</th>
+                    <th class="py-3 px-4">Daily Tariff</th>
+                    <th class="py-3 px-4">Bed Specification</th>
+                    <th class="py-3 px-4 text-right">Quick Action</th>
+                  </tr>
+                </thead>
+                <tbody id="rooms-table-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB: ALL PATIENTS DIRECTORY                    -->
+        <!-- ============================================== -->
+        <section id="tab-patients-dir" class="hidden space-y-6">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">Admitted Patients Directory</h2>
+                <p class="text-xs text-slate-500">Comprehensive database of active in-patients</p>
+              </div>
+              <div class="relative w-full sm:w-64">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+                <input type="text" id="patient-search" oninput="renderPatients()" placeholder="Search patient name..."
+                  class="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-600">
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="border-b border-slate-200 bg-slate-50 text-slate-600 text-xs uppercase font-bold tracking-wider">
+                    <th class="py-3 px-4">Patient Name</th>
+                    <th class="py-3 px-4">ID Proof</th>
+                    <th class="py-3 px-4">Gender</th>
+                    <th class="py-3 px-4">Diagnosis</th>
+                    <th class="py-3 px-4">Allocated Room</th>
+                    <th class="py-3 px-4">Admission Date</th>
+                    <th class="py-3 px-4">Deposit</th>
+                  </tr>
+                </thead>
+                <tbody id="patients-table-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB: UPDATE & BILLING                          -->
+        <!-- ============================================== -->
+        <section id="tab-billing" class="hidden">
+          <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs max-w-2xl mx-auto">
+            <div class="border-b border-slate-100 pb-5 mb-6">
+              <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-semibold">FINANCE & INVOICING</span>
+              <h2 class="text-xl font-bold text-slate-900 mt-2">Patient Billing & Dues Calculation</h2>
+              <p class="text-xs text-slate-500 mt-1">Select an active patient to recalculate balances and record additional deposits.</p>
+            </div>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Select Active Patient</label>
+                <select id="bill-patient-select" onchange="onBillingPatientSelect()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-600"></select>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-slate-500">Allocated Room</label>
+                  <input type="text" id="bill-room" readonly class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-500">Room Tariff (₹)</label>
+                  <input type="text" id="bill-price" readonly class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold text-indigo-600">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-slate-500">Paid Deposit (₹)</label>
+                  <input type="number" id="bill-deposit" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-emerald-600">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-500">Pending Dues (₹)</label>
+                  <input type="text" id="bill-pending" readonly class="w-full px-3.5 py-2 rounded-xl bg-rose-50 border border-rose-200 text-sm font-bold text-rose-600">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-slate-500">Admission Timestamp</label>
+                <input type="text" id="bill-time" readonly class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+              </div>
+
+              <div class="pt-4 flex gap-3">
+                <button onclick="calculateBillingBalance()" class="flex-1 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-2">
+                  <i data-lucide="calculator" class="w-4 h-4"></i> Recalculate Balance
+                </button>
+                <button onclick="saveBillingUpdate()" class="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                  <i data-lucide="save" class="w-4 h-4"></i> Update Records
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB: PATIENT DISCHARGE                         -->
+        <!-- ============================================== -->
+        <section id="tab-discharge" class="hidden">
+          <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs max-w-2xl mx-auto">
+            <div class="border-b border-slate-100 pb-5 mb-6">
+              <span class="px-2.5 py-1 bg-rose-50 text-rose-700 rounded-full text-xs font-semibold">PATIENT CHECKOUT</span>
+              <h2 class="text-xl font-bold text-slate-900 mt-2">Discharge & Auto-Vacate System</h2>
+              <p class="text-xs text-slate-500 mt-1">Clears patient admission and automatically transitions the allocated bed back to 'Available'.</p>
+            </div>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Select Patient to Discharge</label>
+                <select id="discharge-patient-select" onchange="onDischargeSelect()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-600"></select>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-slate-500">Assigned Room</label>
+                  <input type="text" id="discharge-room" readonly class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-500">Diagnosis</label>
+                  <input type="text" id="discharge-disease" readonly class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-slate-500">Admission Time</label>
+                  <input type="text" id="discharge-in-time" readonly class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-500">Checkout Time</label>
+                  <input type="text" id="discharge-out-time" readonly class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-emerald-600">
+                </div>
+              </div>
+
+              <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+                <span>Discharging will delete the active intake entry and reset the room to <b>Available</b> for new emergencies.</span>
+              </div>
+
+              <div class="pt-4 flex gap-3">
+                <button onclick="confirmDischarge()" class="flex-1 py-3 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                  <i data-lucide="check-circle" class="w-4 h-4"></i> Discharge & Free Bed
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB: STAFF DIRECTORY                           -->
+        <!-- ============================================== -->
+        <section id="tab-staff" class="hidden space-y-6">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">Hospital Staff & Employee Directory</h2>
+                <p class="text-xs text-slate-500">Resident doctors, nursing staff, and operations administrators</p>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="border-b border-slate-200 bg-slate-50 text-slate-600 text-xs uppercase font-bold tracking-wider">
+                    <th class="py-3 px-4">Employee Name</th>
+                    <th class="py-3 px-4">Age</th>
+                    <th class="py-3 px-4">Monthly Salary</th>
+                    <th class="py-3 px-4">Phone Number</th>
+                    <th class="py-3 px-4">Email Address</th>
+                    <th class="py-3 px-4">Govt Aadhar ID</th>
+                  </tr>
+                </thead>
+                <tbody id="staff-table-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB: DEPARTMENTS DIRECTORY                     -->
+        <!-- ============================================== -->
+        <section id="tab-departments" class="hidden space-y-6">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
+            <div class="mb-6">
+              <h2 class="text-xl font-bold text-slate-900">Clinical Departments & Direct Extensions</h2>
+              <p class="text-xs text-slate-500">Official hospital hotlines and extension desk numbers</p>
+            </div>
+            <div id="departments-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB: AMBULANCE FLEET                           -->
+        <!-- ============================================== -->
+        <section id="tab-ambulance" class="hidden space-y-6">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">Ambulance Fleet & Emergency Dispatch</h2>
+                <p class="text-xs text-slate-500">Live readiness tracking of emergency response units</p>
+              </div>
+            </div>
+            <div id="ambulance-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- APPLICATION SCRIPT & STATE MACHINE                             -->
+  <!-- ============================================================== -->
+  <script>
+    // -------------------------------------------------------------
+    // DEFAULT SEED DATA (Exact match to MySQL schema & Java classes)
+    // -------------------------------------------------------------
+    const INITIAL_DATA = {
+      rooms: [
+        { room_no: '101', availability: 'Available', price: '1500', type: 'Single Bed' },
+        { room_no: '102', availability: 'Available', price: '2500', type: 'Double Bed - AC' },
+        { room_no: '103', availability: 'Available', price: '3500', type: 'Deluxe Private Suite' },
+        { room_no: '104', availability: 'Available', price: '1000', type: 'General Ward' },
+        { room_no: '105', availability: 'Available', price: '5000', type: 'ICU Specialized' }
+      ],
+      patients: [
+        {
+          idType: 'Aadhar Card',
+          number: '9876-5432-1001',
+          name: 'Suresh Raina',
+          gender: 'Male',
+          disease: 'Acute Viral Infection',
+          room: '102',
+          time: new Date(Date.now() - 86400000 * 2).toLocaleDateString() + ' 10:30 AM',
+          deposit: '1500'
+        }
+      ],
+      staff: [
+        { name: 'Dr. Rajesh Sharma', age: '45', salary: '120000', phone: '+91 9811122233', email: 'rajesh.sharma@hms.com', aadhar: '123456789012' },
+        { name: 'Dr. Priya Verma', age: '38', salary: '110000', phone: '+91 9822233344', email: 'priya.verma@hms.com', aadhar: '234567890123' },
+        { name: 'Nurse Anjali Gupta', age: '29', salary: '45000', phone: '+91 9833344455', email: 'anjali.g@hms.com', aadhar: '345678901234' },
+        { name: 'Admin Vikram Singh', age: '35', salary: '50000', phone: '+91 9844455566', email: 'vikram.s@hms.com', aadhar: '456789012345' }
+      ],
+      departments: [
+        { name: 'Emergency / Trauma', phone: '+91 9876543210', icon: 'siren' },
+        { name: 'Cardiology', phone: '+91 9876543211', icon: 'heart-pulse' },
+        { name: 'Neurology', phone: '+91 9876543212', icon: 'brain' },
+        { name: 'Orthopedics', phone: '+91 9876543213', icon: 'bone' },
+        { name: 'Pediatrics', phone: '+91 9876543214', icon: 'baby' },
+        { name: 'General Surgery', phone: '+91 9876543215', icon: 'scissors' }
+      ],
+      ambulances: [
+        { name: 'Ramesh Kumar', gender: 'Male', car: 'Force Traveller (ICU)', status: 'Available', location: 'Main Hospital Gate' },
+        { name: 'Suresh Yadav', gender: 'Male', car: 'Mahindra Bolero Neo', status: 'Available', location: 'City Trauma Center' },
+        { name: 'Amit Patel', gender: 'Male', car: 'Tata Winger Ambulance', status: 'Busy', location: 'Sub-station North' }
+      ]
+    };
+
+    // Load or initialize DB state in localStorage
+    let db = JSON.parse(localStorage.getItem('hms_db')) || INITIAL_DATA;
+
+    // Synchronize initial room availability with patients
+    if (db.patients.length > 0) {
+      db.patients.forEach(p => {
+        const room = db.rooms.find(r => r.room_no === p.room);
+        if (room) room.availability = 'Occupied';
+      });
+    }
+
+    function saveDB() {
+      localStorage.setItem('hms_db', JSON.stringify(db));
+      updateUI();
+    }
+
+    function resetData() {
+      if (confirm("Reset all data to default hospital demo state?")) {
+        db = JSON.parse(JSON.stringify(INITIAL_DATA));
+        saveDB();
+        showToast("Demo data reset successfully!", "info");
+      }
+    }
+
+    // -------------------------------------------------------------
+    // TOAST SYSTEM
+    // -------------------------------------------------------------
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const bg = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-slate-800';
+      toast.className = `${bg} text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-lg pointer-events-auto flex items-center gap-2 transform transition-all duration-300 translate-y-[-10px] opacity-0`;
+      toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="w-4 h-4"></i><span>${message}</span>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => toast.classList.remove('translate-y-[-10px]', 'opacity-0'), 10);
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // -------------------------------------------------------------
+    // AUTHENTICATION
+    // -------------------------------------------------------------
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value.trim();
+
+      if ((user === 'admin' && pass === 'admin123') || (user === 'root' && pass === '12345')) {
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('app-view').classList.remove('hidden');
+        switchTab('dashboard');
+        showToast(`Welcome back, ${user}!`, 'success');
+      } else {
+        showToast('Invalid credentials! Try admin / admin123', 'error');
+      }
+    });
+
+    function logout() {
+      document.getElementById('app-view').classList.add('hidden');
+      document.getElementById('login-view').classList.remove('hidden');
+      showToast('Logged out successfully.', 'info');
+    }
+
+    // -------------------------------------------------------------
+    // TAB NAVIGATION
+    // -------------------------------------------------------------
+    const TAB_INFO = {
+      'dashboard': { title: 'Overview Dashboard', desc: 'Live operational telemetry & room availability' },
+      'new-patient': { title: 'New Patient Registration', desc: 'Capture personal details, ID proof and allocate beds' },
+      'rooms': { title: 'Room & Bed Management', desc: 'Real-time room availability, pricing, and category filters' },
+      'patients-dir': { title: 'All Patients Directory', desc: 'Search and inspect all active admitted in-patients' },
+      'billing': { title: 'Update Patient & Billing', desc: 'Compute pending balances and update deposit records' },
+      'discharge': { title: 'Patient Discharge & Checkout', desc: 'Free allocated rooms and record patient discharge' },
+      'staff': { title: 'Staff & Doctors Directory', desc: 'Official roster of doctors, nurses, and administrative staff' },
+      'departments': { title: 'Hospital Departments', desc: 'Emergency contacts and direct extension phone lines' },
+      'ambulance': { title: 'Emergency Ambulance Fleet', desc: 'Live readiness status and driver tracking' }
+    };
+
+    function switchTab(tabId) {
+      document.querySelectorAll('#app-view section').forEach(sec => sec.classList.add('hidden'));
+      const activeSec = document.getElementById(`tab-${tabId}`);
+      if (activeSec) activeSec.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.className = 'nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-600/30';
+        } else {
+          btn.className = 'nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all font-medium';
+        }
+      });
+
+      if (TAB_INFO[tabId]) {
+        document.getElementById('page-title').innerText = TAB_INFO[tabId].title;
+        document.getElementById('page-desc').innerText = TAB_INFO[tabId].desc;
+      }
+
+      if (tabId === 'new-patient') {
+        document.getElementById('p-time-display').innerText = new Date().toLocaleString();
+        populateAvailableRoomsSelect();
+      } else if (tabId === 'billing') {
+        populateBillingSelect();
+      } else if (tabId === 'discharge') {
+        populateDischargeSelect();
+      }
+
+      updateUI();
+    }
+
+    // -------------------------------------------------------------
+    // UI RENDERERS
+    // -------------------------------------------------------------
+    function updateUI() {
+      // Metric counters
+      document.getElementById('stat-patients').innerText = db.patients.length;
+      const availCount = db.rooms.filter(r => r.availability === 'Available').length;
+      const occCount = db.rooms.filter(r => r.availability === 'Occupied').length;
+      document.getElementById('stat-avail-rooms').innerText = availCount;
+      document.getElementById('stat-occ-rooms').innerText = occCount;
+      document.getElementById('stat-ambulances').innerText = db.ambulances.filter(a => a.status === 'Available').length;
+
+      // Dashboard bed grid
+      const grid = document.getElementById('dashboard-bed-grid');
+      grid.innerHTML = db.rooms.map(r => {
+        const isAvail = r.availability === 'Available';
+        return `
+          <div class="p-3.5 rounded-2xl border ${isAvail ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200'} flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-slate-800">#${r.room_no}</span>
+              <span class="w-2 h-2 rounded-full ${isAvail ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
+            </div>
+            <div class="mt-2">
+              <div class="text-[10px] font-semibold uppercase ${isAvail ? 'text-emerald-700' : 'text-rose-700'}">${r.availability}</div>
+              <div class="text-xs text-slate-500 truncate font-medium">${r.type}</div>
+              <div class="text-xs font-bold text-slate-800 mt-1">₹${r.price}/day</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      renderRooms();
+      renderPatients();
+      renderStaff();
+      renderDepartments();
+      renderAmbulances();
+      lucide.createIcons();
+    }
+
+    function renderRooms() {
+      const filter = document.getElementById('room-filter').value;
+      const filtered = filter === 'All' ? db.rooms : db.rooms.filter(r => r.availability === filter);
+      const tbody = document.getElementById('rooms-table-body');
+      tbody.innerHTML = filtered.map(r => {
+        const isAvail = r.availability === 'Available';
+        return `
+          <tr class="hover:bg-slate-50/70 transition-colors">
+            <td class="py-3 px-4 font-bold text-slate-800">Room ${r.room_no}</td>
+            <td class="py-3 px-4">
+              <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${isAvail ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                ${r.availability}
+              </span>
+            </td>
+            <td class="py-3 px-4 font-semibold text-slate-700">₹${r.price} / day</td>
+            <td class="py-3 px-4 text-slate-600">${r.type}</td>
+            <td class="py-3 px-4 text-right">
+              ${isAvail ? `
+                <button onclick="switchTab('new-patient')" class="px-2.5 py-1 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-xs font-semibold">
+                  Allocate
+                </button>
+              ` : `
+                <button onclick="switchTab('discharge')" class="px-2.5 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold">
+                  Checkout
+                </button>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderPatients() {
+      const q = (document.getElementById('patient-search')?.value || '').toLowerCase();
+      const filtered = db.patients.filter(p => p.name.toLowerCase().includes(q) || p.number.includes(q));
+      const tbody = document.getElementById('patients-table-body');
+      tbody.innerHTML = filtered.length ? filtered.map(p => `
+        <tr class="hover:bg-slate-50/70 transition-colors">
+          <td class="py-3 px-4 font-bold text-slate-900">${p.name}</td>
+          <td class="py-3 px-4 text-xs text-slate-500 font-mono">${p.idType}: ${p.number}</td>
+          <td class="py-3 px-4 text-xs">${p.gender}</td>
+          <td class="py-3 px-4 font-medium text-slate-800">${p.disease}</td>
+          <td class="py-3 px-4 font-semibold text-indigo-600">Room ${p.room}</td>
+          <td class="py-3 px-4 text-xs text-slate-500">${p.time}</td>
+          <td class="py-3 px-4 font-bold text-emerald-600">₹${p.deposit}</td>
+        </tr>
+      `).join('') : `<tr><td colspan="7" class="py-8 text-center text-slate-400 text-xs">No matching patient records found.</td></tr>`;
+    }
+
+    function renderStaff() {
+      const tbody = document.getElementById('staff-table-body');
+      tbody.innerHTML = db.staff.map(s => `
+        <tr class="hover:bg-slate-50/70 transition-colors">
+          <td class="py-3 px-4 font-bold text-slate-900">${s.name}</td>
+          <td class="py-3 px-4 text-slate-600">${s.age} yrs</td>
+          <td class="py-3 px-4 font-bold text-slate-800">₹${parseInt(s.salary).toLocaleString()}</td>
+          <td class="py-3 px-4 font-mono text-xs text-slate-600">${s.phone}</td>
+          <td class="py-3 px-4 text-xs text-indigo-600">${s.email}</td>
+          <td class="py-3 px-4 text-xs text-slate-400 font-mono">${s.aadhar}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderDepartments() {
+      const container = document.getElementById('departments-grid');
+      container.innerHTML = db.departments.map(d => `
+        <div class="p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-200 hover:shadow-md transition-all flex items-center justify-between">
+          <div>
+            <h4 class="font-bold text-slate-900 text-sm">${d.name}</h4>
+            <p class="text-xs font-mono text-slate-500 mt-1">${d.phone}</p>
+          </div>
+          <a href="tel:${d.phone}" class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-colors flex items-center justify-center">
+            <i data-lucide="phone-call" class="w-4 h-4"></i>
+          </a>
+        </div>
+      `).join('');
+    }
+
+    function renderAmbulances() {
+      const container = document.getElementById('ambulance-grid');
+      container.innerHTML = db.ambulances.map((a, idx) => {
+        const isAvail = a.status === 'Available';
+        return `
+          <div class="p-5 rounded-2xl border ${isAvail ? 'border-emerald-200 bg-emerald-50/20' : 'border-slate-200 bg-white'} space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">UNIT #${idx + 1}</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${isAvail ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                ${a.status}
+              </span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 text-base">${a.car}</h4>
+              <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                <i data-lucide="user" class="w-3.5 h-3.5"></i> Driver: <b>${a.name}</b>
+              </p>
+              <p class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Station: <b>${a.location}</b>
+              </p>
+            </div>
+            <button onclick="toggleAmbulance(${idx})" class="w-full py-2 rounded-xl text-xs font-semibold ${isAvail ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'bg-emerald-600 hover:bg-emerald-700 text-white'} transition-colors">
+              ${isAvail ? 'Dispatch on Emergency' : 'Mark Available'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleAmbulance(idx) {
+      db.ambulances[idx].status = db.ambulances[idx].status === 'Available' ? 'Busy' : 'Available';
+      saveDB();
+      showToast(`Ambulance Unit #${idx+1} status updated!`, 'info');
+    }
+
+    // -------------------------------------------------------------
+    // ADMISSION FORM
+    // -------------------------------------------------------------
+    function populateAvailableRoomsSelect() {
+      const select = document.getElementById('p-room');
+      const avails = db.rooms.filter(r => r.availability === 'Available');
+      if (avails.length === 0) {
+        select.innerHTML = '<option value="">No beds currently available!</option>';
+      } else {
+        select.innerHTML = avails.map(r => `<option value="${r.room_no}">Room ${r.room_no} (${r.type} - ₹${r.price}/day)</option>`).join('');
+      }
+    }
+
+    document.getElementById('form-new-patient').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const roomNo = document.getElementById('p-room').value;
+      if (!roomNo) {
+        showToast('Please select an available room!', 'error');
+        return;
+      }
+
+      const newPatient = {
+        idType: document.getElementById('p-id-type').value,
+        number: document.getElementById('p-number').value.trim(),
+        name: document.getElementById('p-name').value.trim(),
+        gender: document.querySelector('input[name="p-gender"]:checked').value,
+        disease: document.getElementById('p-disease').value.trim(),
+        room: roomNo,
+        time: new Date().toLocaleString(),
+        deposit: document.getElementById('p-deposit').value.trim() || '0'
+      };
+
+      db.patients.push(newPatient);
+      const room = db.rooms.find(r => r.room_no === roomNo);
+      if (room) room.availability = 'Occupied';
+
+      saveDB();
+      showToast(`Patient ${newPatient.name} successfully admitted to Room ${roomNo}!`, 'success');
+      e.target.reset();
+      switchTab('patients-dir');
+    });
+
+    // -------------------------------------------------------------
+    // BILLING FORM
+    // -------------------------------------------------------------
+    function populateBillingSelect() {
+      const select = document.getElementById('bill-patient-select');
+      if (db.patients.length === 0) {
+        select.innerHTML = '<option value="">No admitted patients</option>';
+        document.getElementById('bill-room').value = '';
+        document.getElementById('bill-price').value = '';
+        document.getElementById('bill-deposit').value = '';
+        document.getElementById('bill-pending').value = '';
+        document.getElementById('bill-time').value = '';
+      } else {
+        select.innerHTML = db.patients.map(p => `<option value="${p.name}">${p.name} (Room ${p.room})</option>`).join('');
+        onBillingPatientSelect();
+      }
+    }
+
+    function onBillingPatientSelect() {
+      const name = document.getElementById('bill-patient-select').value;
+      const patient = db.patients.find(p => p.name === name);
+      if (!patient) return;
+
+      const room = db.rooms.find(r => r.room_no === patient.room);
+      document.getElementById('bill-room').value = `Room ${patient.room}`;
+      document.getElementById('bill-price').value = room ? `₹${room.price}` : '₹0';
+      document.getElementById('bill-deposit').value = patient.deposit;
+      document.getElementById('bill-time').value = patient.time;
+      calculateBillingBalance();
+    }
+
+    function calculateBillingBalance() {
+      const name = document.getElementById('bill-patient-select').value;
+      const patient = db.patients.find(p => p.name === name);
+      if (!patient) return;
+      const room = db.rooms.find(r => r.room_no === patient.room);
+      const price = room ? parseInt(room.price) : 0;
+      const deposit = parseInt(document.getElementById('bill-deposit').value) || 0;
+      const pending = Math.max(0, price - deposit);
+      document.getElementById('bill-pending').value = `₹${pending}`;
+    }
+
+    function saveBillingUpdate() {
+      const name = document.getElementById('bill-patient-select').value;
+      const patient = db.patients.find(p => p.name === name);
+      if (!patient) return;
+
+      const newDeposit = document.getElementById('bill-deposit').value;
+      patient.deposit = newDeposit;
+      saveDB();
+      showToast(`Updated billing and deposit record for ${patient.name}!`, 'success');
+    }
+
+    // -------------------------------------------------------------
+    // DISCHARGE FORM
+    // -------------------------------------------------------------
+    function populateDischargeSelect() {
+      const select = document.getElementById('discharge-patient-select');
+      if (db.patients.length === 0) {
+        select.innerHTML = '<option value="">No active patients to discharge</option>';
+        document.getElementById('discharge-room').value = '';
+        document.getElementById('discharge-disease').value = '';
+        document.getElementById('discharge-in-time').value = '';
+        document.getElementById('discharge-out-time').value = '';
+      } else {
+        select.innerHTML = db.patients.map(p => `<option value="${p.number}">${p.name} (ID: ${p.number})</option>`).join('');
+        onDischargeSelect();
+      }
+    }
+
+    function onDischargeSelect() {
+      const num = document.getElementById('discharge-patient-select').value;
+      const patient = db.patients.find(p => p.number === num);
+      if (!patient) return;
+
+      document.getElementById('discharge-room').value = `Room ${patient.room}`;
+      document.getElementById('discharge-disease').value = patient.disease;
+      document.getElementById('discharge-in-time').value = patient.time;
+      document.getElementById('discharge-out-time').value = new Date().toLocaleString();
+    }
+
+    function confirmDischarge() {
+      const num = document.getElementById('discharge-patient-select').value;
+      const pIdx = db.patients.findIndex(p => p.number === num);
+      if (pIdx === -1) {
+        showToast('No patient selected!', 'error');
+        return;
+      }
+
+      const patient = db.patients[pIdx];
+      const room = db.rooms.find(r => r.room_no === patient.room);
+      if (room) {
+        room.availability = 'Available';
+      }
+
+      db.patients.splice(pIdx, 1);
+      saveDB();
+      showToast(`Patient ${patient.name} discharged! Room ${patient.room} is now Available.`, 'success');
+      populateDischargeSelect();
+    }
+
+    // Initial boot
+    updateUI();
+  </script>
+</body>
+</html>
