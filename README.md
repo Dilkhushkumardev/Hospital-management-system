@@ -7,18 +7,24 @@
 [![Java](https://img.shields.io/badge/Java-11%2B%20%7C%208%2B-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Swing GUI](https://img.shields.io/badge/GUI-Java%20Swing%20%26%20AWT-blue?style=for-the-badge&logo=java&logoColor=white)](https://docs.oracle.com/javase/tutorial/uiswing/)
-[![JDBC](https://img.shields.io/badge/Database%20Driver-JDBC%20Connector-orange?style=for-the-badge)](https://dev.mysql.com/downloads/connector/j/)
+[![Live Demo](https://img.shields.io/badge/Live_Web_App-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://hospitalmanagemantsystemj.netlify.app/)
+[![CI Status](https://img.shields.io/badge/GitHub_Actions-Passed-success?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Dilkhushkumardev/Hospital-management-system/actions)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Active%20%2F%20Maintained-brightgreen?style=for-the-badge)](#)
+
+<br/>
+
+> 🌐 **Live Web Application:** [https://hospitalmanagemantsystemj.netlify.app/](https://hospitalmanagemantsystemj.netlify.app/)  
+> *(Demo Credentials: Username: `admin` | Password: `admin123`)*
 
 <br/>
 
 <p align="center">
-  <b>Hospital Management System (HMS)</b> is a comprehensive, feature-packed desktop software designed to automate and streamline core hospital workflows, including patient admissions, room allocations, real-time billing calculations, staff management, department phone directories, ambulance emergency dispatch, and patient discharges.
+  <b>Hospital Management System (HMS)</b> is a comprehensive, feature-packed healthcare & hospital administration software suite designed to automate and streamline core workflows, including patient admissions, room allocations, real-time billing calculations, staff management, department phone directories, ambulance emergency dispatch, and patient discharges.
 </p>
 
 ---
 
+[🌐 Live Web Demo](https://hospitalmanagemantsystemj.netlify.app/) •
 [Key Features](#-key-features) •
 [System Architecture](#-system-architecture) •
 [Database Schema & Setup](#-database-schema--sql-setup) •
