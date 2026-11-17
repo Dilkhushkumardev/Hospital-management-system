@@ -43,18 +43,27 @@ jobs:
 
       - name: Run Headless Verification Test
         run: |
-          # Test database connectivity and class loading in headless mode
-          java -Djava.awt.headless=true -cp "bin:mysql-connector-java-8.0.28.jar:ResultSet2xml.jar" -e '
-            public class Test {
+          cat << 'EOF' > TestDB.java
+          import hospital.management.system.conn;
+
+          public class TestDB {
               public static void main(String[] args) {
-                System.out.println("Testing DB Connection from CI...");
-                hospital.management.system.conn c = new hospital.management.system.conn();
-                if (c.statement != null) {
-                  System.out.println("Database connected successfully in GitHub Actions!");
-                } else {
-                  System.err.println("Database connection failed!");
-                  System.exit(1);
-                }
+                  System.out.println("Testing DB Connection from GitHub Actions...");
+                  try {
+                      conn c = new conn();
+                      if (c.statement != null) {
+                          System.out.println("SUCCESS: Database connected successfully in GitHub Actions!");
+                          System.exit(0);
+                      } else {
+                          System.err.println("FAILED: Database statement is null!");
+                          System.exit(1);
+                      }
+                  } catch (Exception e) {
+                      e.printStackTrace();
+                      System.exit(1);
+                  }
               }
-            }
-          '
+          }
+          EOF
+          javac -cp ".:bin:mysql-connector-java-8.0.28.jar" TestDB.java
+          java -Djava.awt.headless=true -cp ".:bin:mysql-connector-java-8.0.28.jar:ResultSet2xml.jar" TestDB
